@@ -1,4 +1,4 @@
-import { TikiRequest } from '@/configs/tiki_request';
+import { TikiRequest } from '@/constants/tiki_request';
 import ProductReview from '@/models/product_reviews';
 import Review from '@/models/review';
 import ReviewStar from '@/models/review_star';
@@ -87,7 +87,6 @@ export async function fetchProductReviewAction(
       reviews: accumulatedReviews,
       review_stars: reviewStars,
     };
-
     return productReviewModel;
   } catch (err) {
     console.error(err);

@@ -1,48 +1,104 @@
-import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
-
+import React, { useMemo } from 'react';
 import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from '@/components/ui/chart';
+  Bar,
+  BarChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from 'recharts';
 
-const chartData = [
-  { month: 'January', desktop: 186, mobile: 80 },
-  { month: 'February', desktop: 305, mobile: 200 },
-  { month: 'March', desktop: 237, mobile: 120 },
-  { month: 'April', desktop: 73, mobile: 190 },
-  { month: 'May', desktop: 209, mobile: 130 },
-  { month: 'June', desktop: 214, mobile: 140 },
-];
+type Review = {
+  id: string;
+  title: string;
+  content: string;
+  rating: number; // Rating từ 1 đến 5
+  name_reviewer: string;
+  sentiment?: string;
+};
 
-const chartConfig = {
-  desktop: {
-    label: 'Desktop',
-    color: '#2563eb',
+const reviewChartConfig = {
+  '1': {
+    label: '1 Star',
+    color: '#112D4E',
   },
-  mobile: {
-    label: 'Mobile',
-    color: '#60a5fa',
+  '2': {
+    label: '2 Stars',
+    color: '#3F72AF',
   },
-} satisfies ChartConfig;
+  '3': {
+    label: '3 Stars',
+    color: '#0F4C75',
+  },
+  '4': {
+    label: '4 Stars',
+    color: '#DBE2EF',
+  },
+  '5': {
+    label: '5 Stars',
+    color: '#F9F7F7',
+  },
+};
 
-export function ReviewsChart() {
+interface ReviewsChartProps {
+  reviews: Review[];
+}
+
+export function ReviewsChart({ reviews }: ReviewsChartProps) {
+  // Xử lý dữ liệu để tính tổng số lượng đánh giá theo từng sao
+  const processedChartData = useMemo(() => {
+    const starCounts: { [key: string]: number } = {
+      '1': 0,
+      '2': 0,
+      '3': 0,
+      '4': 0,
+      '5': 0,
+    };
+    reviews.forEach((review) => {
+      if (review.rating >= 1 && review.rating <= 5) {
+        starCounts[review.rating.toString()] += 1;
+      }
+    });
+    return Object.entries(starCounts).map(([star, count]) => ({
+      star, // Số sao (1-5)
+      count, // Số lượng đánh giá
+      fill: reviewChartConfig[star as keyof typeof reviewChartConfig].color, // Màu sắc cho cột
+    }));
+  }, [reviews]);
+
   return (
-    <ChartContainer config={chartConfig} className="h-[200px] w-full">
-      <BarChart accessibilityLayer data={chartData}>
-        <CartesianGrid vertical={false} />
-        <XAxis
-          dataKey="month"
-          tickLine={false}
-          tickMargin={10}
-          axisLine={false}
-          tickFormatter={(value) => value.slice(0, 3)}
-        />
-        <ChartTooltip content={<ChartTooltipContent />} />
-        <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
-        <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
-      </BarChart>
-    </ChartContainer>
+    <div className="h-[600px] w-full">
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart data={processedChartData}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis
+            dataKey="star"
+            label={{
+              value: 'Stars',
+              position: 'insideBottom',
+              offset: -5,
+              fill: '#555',
+            }}
+          />
+          <YAxis
+            label={{
+              value: 'Count',
+              angle: -90,
+              position: 'insideLeft',
+              fill: '#555',
+            }}
+          />
+          <Tooltip />
+          <Bar
+            dataKey="count"
+            barSize={40}
+            isAnimationActive={false}
+            // Gắn màu cho từng cột
+            fill={({ payload }) => payload.fill}
+          />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
   );
 }

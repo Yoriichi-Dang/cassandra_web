@@ -1,6 +1,6 @@
 'use server';
 
-import { TikiRequest } from '@/configs/tiki_request';
+import { TikiRequest } from '@/constants/tiki_request';
 import Product from '@/models/product';
 import ProductImage from '@/models/product_image';
 import { extractProductId } from '@/utils/product_id';
@@ -49,7 +49,7 @@ export async function fetchProductAction(
     };
     return productModel;
   } catch (error) {
-    console.log(err);
+    console.log(error);
     return null;
   }
 }

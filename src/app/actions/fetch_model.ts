@@ -1,8 +1,11 @@
 'use server';
 
+import { ModelApi } from '@/constants/model_api';
+
 export async function fetchModel(content: string): Promise<string | null> {
   try {
-    const baseUrl = '127.0.0.1:8000/sentiment/cassandra';
+    // Thêm giao thức "http://"
+    const baseUrl = `http://${ModelApi.baseUrl}:${ModelApi.port}/${ModelApi.nameServer}/${ModelApi.cassandra}`;
     const response = await fetch(baseUrl, {
       method: 'POST',
       headers: {
@@ -12,13 +15,12 @@ export async function fetchModel(content: string): Promise<string | null> {
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch product reviews on page ${currentPage}`);
+      throw new Error(`Failed to fetch product reviews`);
     }
     const result = await response.json();
-    console.log(result);
-    return result;
+    return result['result'];
   } catch (error) {
-    console.log(err);
+    console.error(error);
     return null;
   }
 }

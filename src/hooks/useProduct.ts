@@ -42,7 +42,7 @@ export function useProduct(initialUrl: string | null = null) {
     setReviewsLoading(true);
     try {
       const result = await fetchProductReviewAction(product.id);
-
+      console.log(result);
       if (result && !('error' in result)) {
         setProduct((prev) =>
           prev ? { ...prev, product_reviews: result } : prev,

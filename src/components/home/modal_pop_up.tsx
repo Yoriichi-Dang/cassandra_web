@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -20,24 +19,27 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChartSimple } from '@fortawesome/free-solid-svg-icons';
 import useMediaQuery from '@/hooks/useMediaQuery';
-export function DrawerDialogDemo({ children }: { children: React.ReactNode }) {
-  const [open, setOpen] = React.useState(false);
+import { useState } from 'react';
+export function ModalPopUp({ children }: { children: React.ReactNode }) {
+  const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery('(min-width: 768px)');
 
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button className="w-20" variant="outline">
-            Chart
+          <Button>
+            <FontAwesomeIcon icon={faChartSimple} />
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[800px]">
+        <DialogContent className="sm:max-w-[1100px]">
           <DialogHeader>
-            <DialogTitle>Edit profile</DialogTitle>
+            <DialogTitle>Rating Overview</DialogTitle>
             <DialogDescription>
-              Make changes to your profile here. Click save when you're done.
+              Get a quick overview of the star rating reviews for this product.
             </DialogDescription>
           </DialogHeader>
           {children}

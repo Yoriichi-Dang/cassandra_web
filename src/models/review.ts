@@ -4,6 +4,7 @@ type Review = {
   content: string;
   rating: number;
   name_reviewer: string;
+  sentiment?: string;
 };
 
 export default Review;
