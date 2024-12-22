@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import Review from '@/models/review';
-import { fetchModel } from '@/app/actions/fetch_model';
+import { fetchModel, PredictResponse } from '@/app/actions/fetch_model';
 
 interface UseSentimentAllReturn {
   onPending: boolean;
@@ -9,7 +9,10 @@ interface UseSentimentAllReturn {
   predictAll: () => Promise<void>;
 }
 
-export function useSentimentAll(reviews: Review[]): UseSentimentAllReturn {
+export function useSentimentAll(
+  reviews: Review[],
+  model: string,
+): UseSentimentAllReturn {
   const [onPending, setOnPending] = useState<boolean>(false);
   const [numberCompleted, setNumberCompleted] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
@@ -21,9 +24,12 @@ export function useSentimentAll(reviews: Review[]): UseSentimentAllReturn {
 
     for (const review of reviews) {
       try {
-        const result = await fetchModel(review.content);
+        const result: PredictResponse | null = await fetchModel(
+          review.content,
+          model,
+        );
         if (result) {
-          review.sentiment = result;
+          review.sentiment = result['label'];
           setNumberCompleted((prev) => prev + 1);
         }
       } catch (err) {
@@ -37,7 +43,7 @@ export function useSentimentAll(reviews: Review[]): UseSentimentAllReturn {
     }
 
     setOnPending(false);
-  }, [reviews]);
+  }, [reviews, model]);
 
   return { onPending, numberCompleted, error, predictAll };
 }

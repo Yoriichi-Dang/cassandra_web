@@ -10,15 +10,17 @@ import {
 
 import { DataTablePagination } from './reviews_table_paging';
 import { Button } from '../ui/button';
-import { fetchModel } from '@/app/actions/fetch_model';
+import { fetchModel, PredictResponse } from '@/app/actions/fetch_model';
 import Spinner from './spinner';
 
 interface DataTableProps<TData> {
   data: TData[];
+  model: string;
 }
 
 const ReviewsTable: React.FC<DataTableProps<Review>> = ({
   data: initialData,
+  model,
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<Review[]>(initialData);
@@ -29,11 +31,16 @@ const ReviewsTable: React.FC<DataTableProps<Review>> = ({
     () => async (review: Review) => {
       try {
         setLoading(true);
-        const result = await fetchModel(review.content);
-        if (result) {
+        const result: PredictResponse | null = await fetchModel(
+          review.content,
+          model,
+        );
+        if (result !== null) {
           setData((prevData) =>
             prevData.map((item) =>
-              item.id === review.id ? { ...item, sentiment: result } : item,
+              item.id === review.id
+                ? { ...item, sentiment: result.label }
+                : item,
             ),
           );
         }
@@ -43,7 +50,7 @@ const ReviewsTable: React.FC<DataTableProps<Review>> = ({
         setLoading(false);
       }
     },
-    [],
+    [model],
   );
 
   // Memo hóa cột để tránh tái tạo không cần thiết

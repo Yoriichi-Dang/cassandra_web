@@ -3,4 +3,5 @@ export const ModelApi = {
   port: process.env.MODEL_PORT,
   nameServer: process.env.MODEL_NAME_SERVER,
   cassandra: 'cassandra',
+  electra: 'electra',
 };

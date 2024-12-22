@@ -13,10 +13,7 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -54,12 +51,12 @@ export function ModalPopUp({ children }: { children: React.ReactNode }) {
         <Button variant="outline">Edit Profile</Button>
       </DrawerTrigger>
       <DrawerContent>
-        <DrawerHeader className="text-left">
-          <DrawerTitle>Edit profile</DrawerTitle>
-          <DrawerDescription>
-            Make changes to your profile here. Click save when you're done.
-          </DrawerDescription>
-        </DrawerHeader>
+        <DialogHeader>
+          <DialogTitle>Rating Overview</DialogTitle>
+          <DialogDescription>
+            Get a quick overview of the star rating reviews for this product.
+          </DialogDescription>
+        </DialogHeader>
         {children}
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
