@@ -7,7 +7,6 @@ export async function fetchProductReviewAction(
   productId: string,
 ): Promise<ProductReview | null> {
   try {
-    const baseUrl = TikiRequest.productBaseUrl;
     let currentPage = 1;
     let hasMore = true;
 
@@ -16,7 +15,7 @@ export async function fetchProductReviewAction(
     const seenReviewIds: Set<string> = new Set(); // Track unique review IDs
 
     while (hasMore) {
-      const apiUrl = `${baseUrl}/reviews?include=comments,contribute_info,attribute_vote_summary&page=${currentPage}&product_id=${productId}`;
+      const apiUrl = `/api/reviews?product_id=${productId}&page=${currentPage}`;
       const headers = TikiRequest.headers;
       const response = await fetch(apiUrl, { method: 'GET', headers });
 
