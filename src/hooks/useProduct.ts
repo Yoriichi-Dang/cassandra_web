@@ -24,7 +24,11 @@ export function useProduct(initialUrl: string | null = null) {
       if (result && !('error' in result)) {
         setProduct(result);
       } else {
-        throw new Error(result?.error || 'Failed to fetch product');
+        throw new Error(
+          typeof result?.error === 'string'
+            ? result.error
+            : 'Failed to fetch product',
+        );
       }
     } catch (err) {
       setError(
@@ -48,7 +52,11 @@ export function useProduct(initialUrl: string | null = null) {
           prev ? { ...prev, product_reviews: result } : prev,
         );
       } else {
-        throw new Error(result?.error || 'Failed to fetch reviews');
+        throw new Error(
+          typeof result?.error === 'string'
+            ? result.error
+            : 'Failed to fetch reviews',
+        );
       }
     } catch (err) {
       setError(
