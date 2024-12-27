@@ -94,8 +94,7 @@ export function ReviewsChart({ reviews }: ReviewsChartProps) {
             dataKey="count"
             barSize={40}
             isAnimationActive={false}
-            // Gắn màu cho từng cột
-            fill={({ payload }) => payload.fill}
+            fillOpacity={1}
           />
         </BarChart>
       </ResponsiveContainer>
