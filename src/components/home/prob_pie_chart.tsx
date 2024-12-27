@@ -14,8 +14,8 @@ import {
 
 export function ProbPieChart({ data }: { data: { prob: number } }) {
   // Tính phần trăm Positive và Negative
-  const negativePercentage = Math.round(data.prob * 100);
-  const positivePercentage = 100 - negativePercentage;
+  const negativePercentage = 100 - Math.round(data.prob * 100);
+  const positivePercentage = Math.round(data.prob * 100);
 
   // Dữ liệu biểu đồ
   const chartData = [
